@@ -59,7 +59,6 @@ diffbrowsers [fonts_after] -fb [fonts_before] -o ~/Desktop/font_img
 
 ```
 diffbrowsers [fonts_after] -fb [fonts_before]  -o ~/Desktop/font_img -v glyphs-all -gif -pt 20
-
 ```
 
 **Compare a set of fonts against the same families hosted on Google Fonts**
