@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 from PIL import Image, ImageChops
 import browserstack_screenshots
 import requests
@@ -9,7 +10,7 @@ import time
 import shutil
 import logging
 
-from browsers import test_browsers
+from diffbrowsers.browsers import test_browsers
 
 
 VIEWS = [

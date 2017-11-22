@@ -5,6 +5,7 @@ the same as before. Users do notice changes:
 https://github.com/google/fonts/issues/644
 https://github.com/google/fonts/issues/528
 """
+from __future__ import print_function, division, absolute_import, unicode_literals
 import argparse
 import os
 import time
@@ -55,7 +56,7 @@ def main():
     with open(report_path, 'w') as doc:
         doc.write(report)
 
-    print report
+    print(report)
 
 
 if __name__ == '__main__':

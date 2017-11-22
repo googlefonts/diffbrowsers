@@ -14,6 +14,7 @@ github repository.
 Throw this onto AWS or another cloud platform.
 
 """
+from __future__ import print_function, division, absolute_import, unicode_literals
 import argparse
 import requests
 import json
