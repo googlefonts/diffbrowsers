@@ -1,13 +1,12 @@
 import unittest
 import requests
-from diffbrowsers.__main__ import (
+from diffbrowsers.diffbrowsers import (
     URL_GF_REGRESSION
 )
 
-
 class TestGFRegressionViews(unittest.TestCase):
 
-    def is_gfregression_running(self):
+    def test_is_gfregression_running(self):
         request = requests.get(URL_GF_REGRESSION)
         self.assertEqual(request.status_code, 200)
 
