@@ -197,30 +197,31 @@ class DiffBrowsers(object):
             dir1_img = os.path.join(dir1, img)
             dir2_img = os.path.join(dir2, img)
             diff_img = os.path.join(diff_dir, img)
-            comparison = self._compare_image(Image.open(dir1_img),
-                                             Image.open(dir2_img), diff_img)
+            comparison = compare_image(Image.open(dir1_img),
+                                       Image.open(dir2_img), diff_img)
             comparisons.append((img, comparison))
         return comparisons
 
-    def _compare_image(self, img1, img2, out_img=None, ignore_first_px_rows=200):
-        """Compare two images and return the amount of different pixels.
 
-        ignore_first_px_rows param will ignore the first n pixel rows. This is
-        useful if the images contain text which shouldn't be diffed and may
-        change such as a header."""
-        img_diff = ImageChops.difference(img1, img2)
+def compare_image(img1, img2, out_img=None, ignore_first_px_rows=200):
+    """Compare two images and return the amount of different pixels.
 
-        pixels = list(img_diff.getdata())
-        width, height = img_diff.size
-        pixels = [pixels[i * width:(i + 1) * width] for i in xrange(height)]
+    ignore_first_px_rows param will ignore the first n pixel rows. This is
+    useful if the images contain text which shouldn't be diffed and may
+    change such as a header."""
+    img_diff = ImageChops.difference(img1, img2)
 
-        px_diff = 0
-        for line in pixels[ignore_first_px_rows:]:
-            for px in line:
-                # ignore image alpha channel if exists
-                r, g, b = px[:3]
-                if r != 0 or g != 0 or b != 0:
-                    px_diff += 1
-        if out_img:
-            img_diff.save(out_img[:-4] + '.png')
-        return px_diff
+    pixels = list(img_diff.getdata())
+    width, height = img_diff.size
+    pixels = [pixels[i * width:(i + 1) * width] for i in xrange(height)]
+
+    px_diff = 0
+    for line in pixels[ignore_first_px_rows:]:
+        for px in line:
+            # ignore image alpha channel if exists
+            r, g, b = px[:3]
+            if r != 0 or g != 0 or b != 0:
+                px_diff += 1
+    if out_img:
+        img_diff.save(out_img[:-4] + '.png')
+    return px_diff
