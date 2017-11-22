@@ -17,12 +17,13 @@ diffbrowsers [fonts_after] -fb [fonts_before] -o ~/Desktop/font_img_dir
 Compare against family hosted on Google Fonts:
 diffbrowsers [fonts_after] -gf -o ~/Desktop/font_img_dir
 """
+from __future__ import print_function, division, absolute_import, unicode_literals
 import argparse
 import os
 
-from diffbrowsers import DiffBrowsers
-from browsers import test_browsers
-from utils import load_browserstack_credentials, cli_reporter
+from diffbrowsers.diffbrowsers import DiffBrowsers
+from diffbrowsers.browsers import test_browsers
+from diffbrowsers.utils import load_browserstack_credentials, cli_reporter
 
 
 def main():
@@ -68,7 +69,7 @@ def main():
     with open(report_path, 'w') as doc:
         doc.write(report)
 
-    print report
+    print(report)
 
 
 if __name__ == '__main__':
