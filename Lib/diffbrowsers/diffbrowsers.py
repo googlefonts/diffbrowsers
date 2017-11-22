@@ -170,17 +170,17 @@ class DiffBrowsers(object):
             gif_filename = img[:-4] + '.gif'
             dir1_img_path = os.path.join(dir1, img)
             dir2_img_path = os.path.join(dir2, img)
-            dir1_img = Image.open(dir1_img_path)
-            dir2_img = Image.open(dir2_img_path)
+            with Image.open(dir1_img_path) as dir1_img, \
+                 Image.open(dir2_img_path) as dir2_img:
 
-            logger.info('Generating gif: %s' % gif_filename)
-            dir1_img.save(
-                os.path.join(out_dir, gif_filename),
-                save_all=True,
-                append_images=[dir2_img],
-                loop=10000,
-                duration=1000
-        )
+                logger.info('Generating gif: %s' % gif_filename)
+                dir1_img.save(
+                    os.path.join(out_dir, gif_filename),
+                    save_all=True,
+                    append_images=[dir2_img],
+                    loop=10000,
+                    duration=1000
+                )
 
     def _matched_filenames_in_dirs(self, dir1, dir2, ext):
         """find matching filenames in two different dirs which have a specific
@@ -195,11 +195,12 @@ class DiffBrowsers(object):
 
         shared_imgs = self._matched_filenames_in_dirs(dir1, dir2, 'jpg')
         for img in shared_imgs:
-            dir1_img = os.path.join(dir1, img)
-            dir2_img = os.path.join(dir2, img)
-            diff_img = os.path.join(diff_dir, img)
-            comparison = compare_image(Image.open(dir1_img),
-                                       Image.open(dir2_img), diff_img)
+            dir1_img_path = os.path.join(dir1, img)
+            dir2_img_path = os.path.join(dir2, img)
+            diff_img_path = os.path.join(diff_dir, img)
+            with Image.open(dir1_img_path) as dir1_img, \
+                Image.open(dir2_img_path) as dir2_img:
+                comparison = compare_image(dir1_img, dir2_img, diff_img_path)
             comparisons.append((img, comparison))
         return comparisons
 
@@ -225,4 +226,5 @@ def compare_image(img1, img2, out_img=None, ignore_first_px_rows=200):
                 px_diff += 1
     if out_img:
         img_diff.save(out_img[:-4] + '.png')
+    img_diff.close()
     return px_diff
