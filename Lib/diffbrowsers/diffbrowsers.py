@@ -77,7 +77,8 @@ class DiffBrowsers(object):
         diff_dir = os.path.join(view_path, 'diff')
         self._mkdir(diff_dir, overwrite=True)
         comparison = self._compare_images(fonts_before_path, fonts_after_path, diff_dir)
-        self.report['views'][view] = comparison
+        r_view = '{}_{}pt'.format(view, pt) if pt else view
+        self.report['views'][r_view] = comparison
         return comparison
 
     def _post_fonts_to_test(self):
