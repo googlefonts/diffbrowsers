@@ -226,6 +226,7 @@ def compare_image(img1, img2, out_img=None, ignore_first_px_rows=200):
             if r != 0 or g != 0 or b != 0:
                 px_diff += 1
     if out_img:
-        img_diff.save(out_img[:-4] + '.png')
+        img_diff_rgb = img_diff.convert('RGB')
+        img_diff_rgb.save(out_img[:-4] + '.png')
     img_diff.close()
     return px_diff
