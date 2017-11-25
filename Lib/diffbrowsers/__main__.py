@@ -30,12 +30,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     
     parser.add_argument('fonts_after', nargs="+", help="Fonts after paths")
-    set2_group = parser.add_argument_group(title="Font set input")
-    set2_input_group = set2_group.add_mutually_exclusive_group(required=True)
-    set2_input_group.add_argument('-fb', '--fonts-before', nargs="+",
-                                  help="Font set2 paths")
-    set2_input_group.add_argument('-gf', '--from-googlefonts', action='store_true',
-                               help="Diff against GoogleFonts instead of font_set2")
+    before_group = parser.add_argument_group(title="Fonts before input")
+    before_input_group = before_group.add_mutually_exclusive_group(required=True)
+    before_input_group.add_argument('-fb', '--fonts-before', nargs="+",
+                                  help="Fonts before paths")
+    before_input_group.add_argument('-gf', '--from-googlefonts', action='store_true',
+                               help="Diff against GoogleFonts instead of fonts_before")
     parser.add_argument('-o', '--output-dir', help="Directory for output images",
                         required=True)
     parser.add_argument('-pt', '--type-point-size',
@@ -54,22 +54,18 @@ def main():
     auth = load_browserstack_credentials()
     browsers_to_test = test_browsers[args.browsers]
 
-    if args.from_googlefonts:
-        fonts_before = 'from-googlefonts'
-    else:
-        fonts_before = args.fonts_before
+    fonts_before = 'from-googlefonts' if args.from_googlefonts \
+                    else args.fonts_before
 
-    diffbrowsers = DiffBrowsers(auth, args.output_dir, args.fonts_after, fonts_before,
-                                browsers_to_test)
-    diffbrowsers.diff_view(args.view, args.type_point_size,
-                                       args.output_gifs)
+    diffbrowsers = DiffBrowsers(auth, fonts_before, args.fonts_after,
+                                args.output_dir, browsers_to_test)
+    diffbrowsers.diff_view(args.view, args.type_point_size, args.output_gifs)
 
-    report = cli_reporter(diffbrowsers.report)
     report_path = os.path.join(args.output_dir, 'report.txt')
     with open(report_path, 'w') as doc:
+        report = cli_reporter(diffbrowsers.stats)
         doc.write(report)
-
-    print(report)
+        print(report)
 
 
 if __name__ == '__main__':
