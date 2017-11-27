@@ -4,7 +4,7 @@
 Browserdiff
 ~~~~~~~~~~~
 
-Use GF Regression and Browserstack to regression test two sets of fonts
+Compare two sets of fonts for regressions
 
 Caveats, script is incredibly slow due to the Browserstack api. Fonts are
 matched by filenames.

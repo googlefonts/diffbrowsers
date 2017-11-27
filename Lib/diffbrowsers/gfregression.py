@@ -31,7 +31,10 @@ class GFRegression:
         """Post fonts to GF Regression site using the api.
 
         If fonts_before == 'from-googlefonts', compare against fonts hosted
-        on Google Fonts"""
+        on Google Fonts.
+
+        If the fonts uploaded successfully, GF Regression will return a uuid.
+        This can be used to form urls to view endpoints."""
         logger.info("Posting fonts to GF Regression")
         if fonts_before == 'from-googlefonts':
             url_upload = URL_GF_REGRESSION + '/api/upload/googlefonts'
@@ -46,7 +49,7 @@ class GFRegression:
         logger.info("Fonts have been uploaded, uuid: %s" % self.uuid)
 
     def url(self, view, font_type, pt=None):
-        """Return a url from a users input params"""
+        """Return a url from a user's input params."""
         if view not in VIEWS:
             raise UnknownGFRegressionViewError()
         if not self.uuid:

@@ -33,7 +33,10 @@ class DiffBrowsers(object):
         self._mkdir(self.dst_dir)
 
     def diff_view(self, screenshot_view, pt=None, gen_gifs=False):
-        """Diff a GF Regression view"""
+        """Return before and after images from a GF Regression view.
+
+        Use PIL to calculate the amount of different pixels and save
+        the images."""
         view_dir = '{}_{}pt'.format(screenshot_view, pt) if pt \
                    else screenshot_view
         view_path = os.path.join(self.dst_dir, view_dir)
