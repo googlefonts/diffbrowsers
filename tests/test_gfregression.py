@@ -19,17 +19,17 @@ class TestGFRegressionViews(unittest.TestCase):
         """Test DiffBrowsers can build urls for GF Regression"""
         before_url = self.gf_regression.url('waterfall', 'before')
         after_url = self.gf_regression.url('waterfall', 'after')
-        self.assertEqual('http://45.55.138.144/screenshot/custom-uuid/waterfall/after',
+        self.assertEqual('http://www.gf-regression.com/screenshot/custom-uuid/waterfall/after',
                          after_url)
-        self.assertEqual('http://45.55.138.144/screenshot/custom-uuid/waterfall/before',
+        self.assertEqual('http://www.gf-regression.com/screenshot/custom-uuid/waterfall/before',
                          before_url)
 
     def test_url_builder_with_pt_size(self):
         before_url = self.gf_regression.url('glyphs-all', 'before', pt=20)
         after_url = self.gf_regression.url('glyphs-all', 'after', pt=20)
-        self.assertEqual('http://45.55.138.144/screenshot/custom-uuid/glyphs-all/after/20',
+        self.assertEqual('http://www.gf-regression.com/screenshot/custom-uuid/glyphs-all/after/20',
                          after_url)
-        self.assertEqual('http://45.55.138.144/screenshot/custom-uuid/glyphs-all/before/20',
+        self.assertEqual('http://www.gf-regression.com/screenshot/custom-uuid/glyphs-all/before/20',
                          before_url)
 
 

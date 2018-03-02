@@ -6,7 +6,7 @@ import json
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-URL_GF_REGRESSION = 'http://45.55.138.144'
+URL_GF_REGRESSION = 'http://www.gf-regression.com'
 
 VIEWS = [
     'glyphs-all',
