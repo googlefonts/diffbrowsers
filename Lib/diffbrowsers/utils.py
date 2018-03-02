@@ -71,8 +71,11 @@ def cli_reporter(report):
 def download_file(url, dst_path=None):
     """Download a file from a url. If no url is specified, store the file
     as a StringIO object"""
-    request = requests.get(url, stream=True)
-    if not dst_path:
-        return StringIO(request.content)
-    with open(dst_path, 'wb') as downloaded_file:
-        shutil.copyfileobj(request.raw, downloaded_file)
+    try:
+        request = requests.get(url, stream=True)
+        if not dst_path:
+            return StringIO(request.content)
+        with open(dst_path, 'wb') as downloaded_file:
+            shutil.copyfileobj(request.raw, downloaded_file)
+    except requests.exceptions.MissingSchema:
+        raise Exception("url {} is not a valid file".format(url))
