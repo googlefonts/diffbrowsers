@@ -30,7 +30,12 @@ class ScreenShot(browserstack_screenshots.Screenshots):
         for screenshot in screenshots_json['screenshots']:
             filename = self._build_filename_from_browserstack_json(screenshot)
             base_image = os.path.join(dst_dir, filename)
-            download_file(screenshot['image_url'], base_image)
+            try:
+                download_file(screenshot['image_url'], base_image)
+            except:
+                logger.info('Skipping {} BrowserStack timed out'.format(
+                    screenshot['image_url'])
+                )
 
     def _build_filename_from_browserstack_json(self, j):
         """Build useful filename for an image from the screenshot json
