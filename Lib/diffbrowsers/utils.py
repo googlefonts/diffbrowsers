@@ -18,7 +18,7 @@ class NoBrowserStackAuthFile(Exception):
 
 
 def load_browserstack_credentials():
-    """..."""
+    """Load the credentials to use Browserstack's screenshot api."""
     config = ConfigParser()
     config_filepath = os.path.expanduser(CONFIG_FILE)
 
@@ -26,7 +26,24 @@ def load_browserstack_credentials():
         config.read(config_filepath)
         credentials = config.items('Credentials')
         return credentials[0][1], credentials[1][1]
-    raise NoBrowserStackAuthFile()
+    else:
+        return input_browserstack_credentials(config_filepath)
+
+
+def input_browserstack_credentials(config_filepath):
+    """User needs to input their Browserstack username and access key."""
+    placeholder = '[Credentials]\nusername = {}\naccess_key = {}\n'
+    print 'No BrowserStack credentials found. Input your details:'
+    username = raw_input('Browserstack username: ')
+    acc_key = raw_input('Browserstack Access Key: ')
+
+    if not username or not acc_key:
+        raise NoBrowserStackAuthFile()
+
+    with open(config_filepath, 'w') as config:
+        config.write(placeholder.format(username, acc_key))
+        print 'Config file written to {}'.format(config_filepath)
+        return username, acc_key
 
 
 def cli_reporter(report):
