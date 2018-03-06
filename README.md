@@ -1,4 +1,4 @@
-# Browserdiff
+# Googlefonts Diff Browsers
 
 Test two sets of fonts for visual regressions on different browsers.
 
@@ -21,6 +21,23 @@ Test two sets of fonts for visual regressions on different browsers.
 
 Important: This tool uses the Browserstack screenshots api. **You must have a subscription** in order to use this.
 
+
+**For non developers:**
+
+```
+pip install gfdiffbrowsers
+```
+
+**For developers**
+
+```
+$ git clone https://github.com/googlefonts/diffbrowsers
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ pip install . (-e for developer mode)
+```
+
 **Auth**
 
 Create a file ~/.browserstack-api-config containing the following data:
@@ -34,16 +51,6 @@ access_key = <your BrowserStack Access Key>
 This information can be found in https://www.browserstack.com/accounts/settings
 
 
-**Dependencies**
-
-```
-$ git clone https://github.com/googlefonts/diffbrowsers
-$ virtualenv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
-$ pip install . (-e for developer mode)
-```
-
 
 ## Usage
 
@@ -52,19 +59,19 @@ Important: Font names must match between the two sets.
 **Produce a waterfall**
 
 ```
-diffbrowsers [fonts_after] -fb [fonts_before] -o ~/Desktop/font_img
+gfdiffbrowsers [fonts_after] -fb [fonts_before] -o ~/Desktop/font_img
 ```
 
 **Produce a glyph palette containing all glyphs at 20pt, export gifs as well**
 
 ```
-diffbrowsers [fonts_after] -fb [fonts_before]  -o ~/Desktop/font_img -v glyphs-all -gif -pt 20
+gfdiffbrowsers [fonts_after] -fb [fonts_before]  -o ~/Desktop/font_img -v glyphs-all -gif -pt 20
 ```
 
 **Compare a set of fonts against the same families hosted on Google Fonts**
 
 ```
-diffbrowsers [fonts_after] -gf -o ~/Desktop/font_img
+gfdiffbrowsers [fonts_after] -gf -o ~/Desktop/font_img
 ```
 
 ## Caveats

@@ -18,7 +18,7 @@ from setuptools import setup, find_packages, Command
 from distutils import log
 
 setup(
-    name='diffbrowsers',
+    name='gfdiffbrowsers',
     version='0.0.1',
     author="Marc Foley",
     author_email="marc@mfoley.uk",
@@ -29,7 +29,7 @@ setup(
     packages=find_packages("Lib"),
     entry_points={
         "console_scripts": [
-            "diffbrowsers = diffbrowsers.__main__:main"
+            "gfdiffbrowsers = diffbrowsers.__main__:main"
         ],
     },
     scripts=[
@@ -51,5 +51,15 @@ setup(
         'Topic :: Multimedia :: Graphics',
         'Topic :: Multimedia :: Graphics :: Graphics Conversion',
         'Topic :: Multimedia :: Graphics :: Editors :: Vector-Based',
+    ],
+    install_requires=[
+        "idna==2.6",
+        "nose==1.3.7",
+        "olefile==0.44",
+        "Pillow==5.0.0",
+        "pybrowserstack-screenshots==0.1",
+        "requests==2.18.4",
+        "simplejson==3.12.0",
+        "urllib3==1.22",
     ],
 )
