@@ -59,19 +59,25 @@ Important: Font names must match between the two sets.
 **Produce a waterfall**
 
 ```
-gfdiffbrowsers [fonts_after] -fb [fonts_before] -o ~/Desktop/font_img
+gfdiffbrowsers new [fonts_after] -fb [fonts_before] -o ~/Desktop/font_img
 ```
 
 **Produce a glyph palette containing all glyphs at 20pt, export gifs as well**
 
 ```
-gfdiffbrowsers [fonts_after] -fb [fonts_before]  -o ~/Desktop/font_img -v glyphs-all -gif -pt 20
+gfdiffbrowsers new [fonts_after] -fb [fonts_before]  -o ~/Desktop/font_img -v glyphs-all -gif -pt 20
 ```
 
 **Compare a set of fonts against the same families hosted on Google Fonts**
 
 ```
-gfdiffbrowsers [fonts_after] -gf -o ~/Desktop/font_img
+gfdiffbrowsers new [fonts_after] -gf -o ~/Desktop/font_img
+```
+
+**Load an existing session**
+
+```
+gfdiffbrowsers load <url> -o ~/Desktop/font_img
 ```
 
 ## Caveats

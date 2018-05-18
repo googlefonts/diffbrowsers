@@ -32,13 +32,13 @@ def main():
     args = parser.parse_args()
     auth = load_browserstack_credentials()
 
-    browsers = test_browsers['all_browsers']
+    browsers_to_test = test_browsers['all_browsers']
 
     fonts_before = 'from-googlefonts' if args.from_googlefonts \
                     else args.fonts_before
 
-    diffbrowsers = DiffBrowsers(auth, fonts_before, args.fonts_after,
-                                args.output_dir, browsers)
+    diffbrowsers = DiffBrowsers(dst_dir=args.output_dir, browsers=browsers_to_test)
+    diffbrowsers.new_session(fonts_before, args.fonts_after)
 
     for pt in [7, 12, 24]:
         diffbrowsers.diff_view('glyphs-all', pt, gen_gifs=True)

@@ -9,10 +9,10 @@ import time
 import shutil
 import logging
 
-from diffbrowsers.gfregression import GFRegression
+from diffbrowsers.gfregression import GFRegression, GF_PRODUCTION_URL
 from diffbrowsers.browsers import test_browsers
 from diffbrowsers.screenshot import ScreenShot
-
+from diffbrowsers.utils import load_browserstack_credentials
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,23 +20,39 @@ logger = logging.getLogger(__name__)
 
 class DiffBrowsers(object):
     """Class to control GF Regression and Browser Stack api."""
-    def __init__(self, auth, fonts_before, fonts_after, dst_dir,
-                 browsers=test_browsers['all_browsers']):
+    def __init__(self,
+                 auth=load_browserstack_credentials(),
+                 dst_dir=None,
+                 browsers=test_browsers['all_browsers'],
+                 gfr_instance_url=GF_PRODUCTION_URL):
 
-        self.gf_regression = GFRegression()
-        self.gf_regression.upload_fonts(fonts_before, fonts_after)
+        self.gf_regression = GFRegression(
+            instance_url=gfr_instance_url
+        )
         self.screenshot = ScreenShot(auth=auth, config=browsers)
 
-        self.dst_dir = dst_dir
+        self.dst_dir = dst_dir if dst_dir else 'out'
         self.stats = {'views': {},
-                      'fonts': map(os.path.basename, fonts_after)}
+                      'fonts': []}
         self._mkdir(self.dst_dir)
+
+    def new_session(self, fonts_before, fonts_after):
+        """Upload fonts to gfregression"""
+        self.gf_regression.new_session(fonts_before, fonts_after)
+        self.stats['fonts'] = self.gf_regression.fonts
+
+    def load_session(self, url):
+        """Load a previous gf regression session"""
+        self.gf_regression.load_session(url)
+        self.stats['fonts'] = self.gf_regression.fonts
 
     def diff_view(self, screenshot_view, pt=None, gen_gifs=False):
         """Return before and after images from a GF Regression view.
 
         Use PIL to calculate the amount of different pixels and save
         the images."""
+        if not self.gf_regression.uuid:
+            raise Exception("Cannot make diff. Upload or load fonts first")
         view_dir = '{}_{}pt'.format(screenshot_view, pt) if pt \
                    else screenshot_view
         view_path = os.path.join(self.dst_dir, view_dir)

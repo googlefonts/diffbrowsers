@@ -34,13 +34,13 @@ def main():
     args = parser.parse_args()
     auth = load_browserstack_credentials()
 
-    browsers = test_browsers['all_browsers']
+    browsers_to_test = test_browsers['all_browsers']
 
     fonts_before = 'from-googlefonts' if args.from_googlefonts \
                     else args.fonts_before
 
-    diffbrowsers = DiffBrowsers(auth, fonts_before, args.fonts_after,
-                                args.output_dir, browsers)
+    diffbrowsers = DiffBrowsers(dst_dir=args.output_dir, browsers=browsers_to_test)
+    diffbrowsers.new_session(fonts_before, args.fonts_after)
 
     diffbrowsers.diff_view('waterfall', gen_gifs=True)
     logger.info("Sleeping for 10 secs. Giving Browserstack api a rest")
