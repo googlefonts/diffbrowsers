@@ -80,6 +80,18 @@ gfdiffbrowsers new [fonts_after] -gf -o ~/Desktop/font_img
 gfdiffbrowsers load <url> -o ~/Desktop/font_img
 ```
 
+### Local testing
+
+Make sure you have a local copy of [GF Regression](https://github.com/googlefonts/gfregression) running and you also have browserstack enabled to run [locally](https://www.browserstack.com/local-testing). Simply add the following.
+
+`--gfr-url http://localhost-gfr-url`|`-u http://gfr-localhost-url` and `--gfr-local`|`-l`
+
+e.g
+
+```
+gfdiffbrowsers new /path/to/font.ttf -gf -u http://127.0.0.1:5000 -l -o ~/Desktop/fontIMG
+```
+
 ## Caveats
 
 Browserstack's screenshot api isn't fast. Please be patient.

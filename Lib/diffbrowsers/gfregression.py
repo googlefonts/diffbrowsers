@@ -9,13 +9,14 @@ logger = logging.getLogger(__name__)
 
 GF_PRODUCTION_URL = 'http://www.gf-regression.com'
 
-VIEWS = [
-    'glyphs-all',
-    'glyphs-missing',
-    'glyphs-new',
-    'glyphs-modified',
+VIEWS = (
     'waterfall',
-]
+    'glyphs_all', 'glyphs_new', 'glyphs_missing', 'glyphs_modified',
+    'marks_new', 'marks_missing', 'marks_modified',
+    'mkmks_new', 'mkmks_missing', 'mkmks_modified',
+    'kerns_new', 'kerns_missing', 'kerns_modified',
+    'metrics_modified',
+)
 
 
 class UnknownGFRegressionViewError(Exception):
