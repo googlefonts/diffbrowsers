@@ -26,11 +26,16 @@ import os
 
 from diffbrowsers.diffbrowsers import DiffBrowsers
 from diffbrowsers.browsers import test_browsers
-from diffbrowsers.utils import load_browserstack_credentials, cli_reporter
+from diffbrowsers.gfregression import GF_PRODUCTION_URL, VIEWS
+from diffbrowsers.utils import cli_reporter
 
 
 def main():
     parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument('-u', '--gfr-url', default=GF_PRODUCTION_URL,
+                               help="Url to GFR instance")
+    parent_parser.add_argument('-l', '--gfr-local', action="store_true", default=False,
+                               help="Enable this if GFR is being run locally.")
     parent_parser.add_argument('-o', '--output-dir', help="Directory for output images",
                             required=True)
     parent_parser.add_argument('-pt', '--type-point-size',
@@ -39,10 +44,8 @@ def main():
                         choices=['all_browsers', 'gdi_browsers', 'android_browsers'],
                         default='all_browsers',
                         help="Which set of browsers to test on")
-    parent_parser.add_argument('-v', '--view', choices=[
-                        'waterfall', 'glyphs-new', 'glyphs-modified',
-                        'glyphs-missing', 'glyphs-all'], default='waterfall')
-    parent_parser.add_argument('-gif', '--output-gifs', action='store_true', default=False,
+    parent_parser.add_argument('-v', '--view', choices=VIEWS, default='waterfall')
+    parent_parser.add_argument('-gif', '--output-gifs', action='store_true', default=True,
                         help="Output before and after gifs")
 
     parser = argparse.ArgumentParser()
@@ -64,7 +67,10 @@ def main():
 
     browsers_to_test = test_browsers[args.browsers]
 
-    diffbrowsers = DiffBrowsers(dst_dir=args.output_dir, browsers=browsers_to_test)
+    diffbrowsers = DiffBrowsers(gfr_instance_url=args.gfr_url,
+                                gfr_is_local=args.gfr_local,
+                                dst_dir=args.output_dir,
+                                browsers=browsers_to_test)
 
     if args.command == 'new':
         fonts_before = 'from-googlefonts' if args.from_googlefonts \

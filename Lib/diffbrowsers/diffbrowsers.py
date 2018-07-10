@@ -24,12 +24,16 @@ class DiffBrowsers(object):
                  auth=load_browserstack_credentials(),
                  dst_dir=None,
                  browsers=test_browsers['all_browsers'],
-                 gfr_instance_url=GF_PRODUCTION_URL):
+                 gfr_instance_url=GF_PRODUCTION_URL,
+                 gfr_is_local=False):
 
         self.gf_regression = GFRegression(
             instance_url=gfr_instance_url
         )
-        self.screenshot = ScreenShot(auth=auth, config=browsers)
+        self.browserstack_settings = browsers
+        if gfr_is_local:
+            self.browserstack_settings['local'] = True
+        self.screenshot = ScreenShot(auth=auth, config=self.browserstack_settings)
 
         self.dst_dir = dst_dir if dst_dir else 'out'
         self.stats = {'views': {},
@@ -46,7 +50,7 @@ class DiffBrowsers(object):
         self.gf_regression.load_session(url)
         self.stats['fonts'] = self.gf_regression.fonts
 
-    def diff_view(self, screenshot_view, pt=None, gen_gifs=False):
+    def diff_view(self, screenshot_view, pt=None, gen_gifs=True):
         """Return before and after images from a GF Regression view.
 
         Use PIL to calculate the amount of different pixels and save
@@ -131,7 +135,7 @@ class DiffBrowsers(object):
         return comparisons
 
     def update_browsers(self, browsers):
-        self.screenshot.config = browsers
+        self.screenshot.config['browsers'] = browsers['browsers']
 
 
 def compare_image(img1, img2, out_img=None, ignore_first_px_rows=200):
