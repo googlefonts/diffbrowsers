@@ -35,6 +35,7 @@ setup(
     scripts=[
         os.path.join('bin', 'test_gf_autohint.py'),
         os.path.join('bin', 'test_gf_exhaustive.py'),
+        os.path.join('bin', 'viz_diffenator.py')
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
