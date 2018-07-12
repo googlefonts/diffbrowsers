@@ -27,6 +27,9 @@ class DiffBrowsers(object):
                  gfr_instance_url=GF_PRODUCTION_URL,
                  gfr_is_local=False):
 
+        if gfr_instance_url.endswith('/'):
+            gfr_instance_url = gfr_instance_url[:-1]
+
         self.gf_regression = GFRegression(
             instance_url=gfr_instance_url
         )
