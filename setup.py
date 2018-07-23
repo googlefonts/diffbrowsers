@@ -19,7 +19,7 @@ from distutils import log
 
 setup(
     name='gfdiffbrowsers',
-    version='0.0.1',
+    version='0.1.2',
     author="Marc Foley",
     author_email="marc@mfoley.uk",
     description="Diff two sets of fonts in different browsers",
@@ -62,5 +62,6 @@ setup(
         "requests==2.18.4",
         "simplejson==3.12.0",
         "urllib3==1.22",
+        "fontdiffenator==0.1.1",
     ],
 )
