@@ -31,8 +31,7 @@ class GFRegression:
     def __init__(self, instance_url=GF_PRODUCTION_URL):
         self.instance_url = instance_url
         self._validate_instance(self.instance_url)
-        self.uuid = None
-        self.fonts = []
+        self.info = {}
 
     def new_session(self, fonts_before, fonts_after):
         """Post fonts to GF Regression site using the api.
@@ -51,30 +50,28 @@ class GFRegression:
             payload = [('fonts_after', open(f, 'rb')) for f in fonts_after] + \
                       [('fonts_before', open(f, 'rb')) for f in fonts_before]
         request = requests.post(url_upload, files=payload)
-        request_json = json.loads(request.content)
-        self.uuid = request_json['uuid']
-        self.fonts = request_json['fonts']
-        logger.info("Fonts have been uploaded, uuid: %s" % self.uuid)
+        self.info = request.json()
+        logger.info("Fonts have been uploaded, uuid: %s" % self.info['uuid'])
 
     def load_session(self, url):
         """Load fonts which were previously posted to GF Regression"""
-        self.uuid = self._extract_uuid(url)
-        info = self._session_info()
-        self.fonts = info['fonts']
+        uuid = self._extract_uuid(url)
+        self.info = self._session_info(uuid)
 
     def url(self, view, font_type, pt=None):
         """Return a url from a user's input params."""
         if view not in VIEWS:
             raise UnknownGFRegressionViewError()
-        if not self.uuid:
+        if not self.info['uuid']:
             raise Exception('No fonts uploaded or previous uuid defined')
         url = '%s/screenshot/%s/%s/%s' % (self.instance_url,
-                                          self.uuid, view, font_type)
+                                          self.info['uuid'], view, font_type)
         if pt:
             url = url + '/%s' % pt
         return url
 
-    def _extract_uuid(self, url):
+    @staticmethod
+    def _extract_uuid(url):
         """Extract a uuid4 subpath from a url.
 
         http://127.0.0.1:5000/compare/a3ec8a52-690d-4faf-b567-13a488125c62/fonts
@@ -91,16 +88,13 @@ class GFRegression:
                 return segments[idx]
         raise Exception('Url does not contain a valid uuid4')
 
-    def _session_info(self):
+    def _session_info(self, uuid):
         """Return info about the current session"""
-        if not self.uuid:
-            raise Exception("No fonts uploaded or session loaded")
-
-        url = "%s/api/info/%s" % (self.instance_url, self.uuid)
+        url = "%s/api/info/%s" % (self.instance_url, uuid)
         request = requests.get(url)
         if request.status_code != 200:
             raise Exception('url %s is invalid' % url)
-        return json.loads(request.content)
+        return request.json()
 
     def _validate_instance(self, url):
         """Confirm instance_url is a working instance of GFRegression"""

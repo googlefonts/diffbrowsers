@@ -2,9 +2,7 @@
 Visualize any differences found with fontdiffenator
 """
 import argparse
-from diffenator.font import InputFont
-from diffenator.diff import diff_fonts
-from diffbrowsers.gfregression import GF_PRODUCTION_URL, VIEWS 
+from diffbrowsers.gfregression import GF_PRODUCTION_URL, VIEWS
 from diffbrowsers.diffbrowsers import DiffBrowsers
 from diffbrowsers.browsers import test_browsers
 import os
@@ -23,21 +21,6 @@ def main():
     parser.add_argument('-l', '--gfr-local', action="store_true", default=False)
     args = parser.parse_args()
 
-    if os.path.basename(args.font_a) != os.path.basename(args.font_b):
-        raise Exception('font_a and font_b must has same filename')
-
-    logger.info("Diffenating fonts")
-    font_a = InputFont(args.font_a)
-    font_b = InputFont(args.font_b)
-    diff = diff_fonts(font_a, font_b)
-
-    views_to_diff = []
-    for cat in diff:
-        for sub_cat in diff[cat]:
-            gfr_view = '{}_{}'.format(cat, sub_cat)
-            if len(diff[cat][sub_cat]) > 0 and gfr_view in VIEWS:
-                views_to_diff.append(gfr_view)
-
     browsers_to_test = test_browsers['gdi_browsers']
     output_dir = 'out'
     if not os.path.isdir(output_dir):
@@ -51,9 +34,14 @@ def main():
 
     diffbrowsers.new_session([args.font_a], [args.font_b])
 
+    views_to_diff = diffbrowsers.gf_regression.info['diffs']
+    logger.info("Following diffs have been found [%s]. Genning images." % ', '.join(views_to_diff))
     for view in views_to_diff:
         logger.info("Generating images for {}".format(view))
-        diffbrowsers.diff_view(view)
+        if view not in VIEWS:
+            logger.info("Skipping view {}".format(view))
+        else:
+            diffbrowsers.diff_view(view, pt=32)
 
     logger.info("Images saved to {}".format(output_dir))
 

@@ -46,20 +46,24 @@ class DiffBrowsers(object):
     def new_session(self, fonts_before, fonts_after):
         """Upload fonts to gfregression"""
         self.gf_regression.new_session(fonts_before, fonts_after)
-        self.stats['fonts'] = self.gf_regression.fonts
+        logger.info("Posting fonts to GF Regression. Be patient.")
+        self.stats['fonts'] = self.gf_regression.info['fonts']
 
     def load_session(self, url):
         """Load a previous gf regression session"""
         self.gf_regression.load_session(url)
-        self.stats['fonts'] = self.gf_regression.fonts
+        self.stats['fonts'] = self.gf_regression.info['fonts']
 
     def diff_view(self, screenshot_view, pt=None, gen_gifs=True):
         """Return before and after images from a GF Regression view.
 
         Use PIL to calculate the amount of different pixels and save
         the images."""
-        if not self.gf_regression.uuid:
+        if not self.gf_regression.info['uuid']:
             raise Exception("Cannot make diff. Upload or load fonts first")
+        if self.gf_regression.info['has_vfs']:
+            raise Exception(("Can't screenshot. Browserstack does not "
+                             "support variable fonts yet"))
         view_dir = '{}_{}pt'.format(screenshot_view, pt) if pt \
                    else screenshot_view
         view_path = os.path.join(self.dst_dir, view_dir)
