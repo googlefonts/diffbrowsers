@@ -41,7 +41,7 @@ def main():
     parent_parser.add_argument('-pt', '--type-point-size',
                             help="In some views, users can control type sample size")
     parent_parser.add_argument('-b', '--browsers',
-                        choices=['all_browsers', 'gdi_browsers', 'android_browsers'],
+                        choices=list(test_browsers.keys()),
                         default='all_browsers',
                         help="Which set of browsers to test on")
     parent_parser.add_argument('-v', '--view', choices=VIEWS, default='waterfall')

@@ -61,9 +61,6 @@ class DiffBrowsers(object):
         the images."""
         if not self.gf_regression.info['uuid']:
             raise Exception("Cannot make diff. Upload or load fonts first")
-        if self.gf_regression.info['has_vfs']:
-            raise Exception(("Can't screenshot. Browserstack does not "
-                             "support variable fonts yet"))
         view_dir = '{}_{}pt'.format(screenshot_view, pt) if pt \
                    else screenshot_view
         view_path = os.path.join(self.dst_dir, view_dir)
