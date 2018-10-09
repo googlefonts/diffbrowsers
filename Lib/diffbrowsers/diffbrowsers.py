@@ -145,12 +145,17 @@ class DiffBrowsers(object):
         self.screenshot.config['browsers'] = browsers['browsers']
 
 
-def compare_image(img1, img2, out_img=None, ignore_first_px_rows=200):
+def compare_image(img1, img2, out_img=None,
+                  ignore_first_px_rows=200, ignore_right_px_cols=40):
     """Compare two images and return the amount of different pixels.
 
     ignore_first_px_rows param will ignore the first n pixel rows. This is
     useful if the images contain text which shouldn't be diffed and may
-    change such as a header."""
+    change such as a header.
+
+    ignore_right_px_cols param will ignore the last n pixel columns. GF Regression
+    shows before and after labels in the right hand margin. We don't want these
+    labels to be included in the pixel count."""
     img_diff = ImageChops.difference(img1, img2)
 
     pixels = list(img_diff.getdata())
@@ -159,7 +164,7 @@ def compare_image(img1, img2, out_img=None, ignore_first_px_rows=200):
 
     px_diff = 0
     for line in pixels[ignore_first_px_rows:]:
-        for px in line:
+        for px in line[:-ignore_right_px_cols]:
             # ignore image alpha channel if exists
             r, g, b = px[:3]
             if r != 0 or g != 0 or b != 0:
