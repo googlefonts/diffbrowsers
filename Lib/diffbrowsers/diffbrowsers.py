@@ -21,11 +21,14 @@ logger = logging.getLogger(__name__)
 class DiffBrowsers(object):
     """Class to control GF Regression and Browser Stack api."""
     def __init__(self,
-                 auth=load_browserstack_credentials(),
+                 auth=None,
                  dst_dir=None,
                  browsers=test_browsers['all_browsers'],
                  gfr_instance_url=GF_PRODUCTION_URL,
                  gfr_is_local=False):
+
+        if not auth:
+            auth = load_browserstack_credentials()
 
         if gfr_instance_url.endswith('/'):
             gfr_instance_url = gfr_instance_url[:-1]
