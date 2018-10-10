@@ -99,7 +99,7 @@ class GFRegression:
     def _validate_instance(self, url):
         """Confirm instance_url is a working instance of GFRegression"""
         request = requests.get(url)
-        if 'Google Fonts Regression' not in request.content and \
-           'Compare fonts' not in request.content:
+        if 'Google Fonts Regression' not in request.text and \
+           'Compare fonts' not in request.text:
             raise Exception(('instance_url %s is not an instance of '
                              'GF Regression' % url))
