@@ -160,7 +160,7 @@ def compare_image(img1, img2, out_img=None,
 
     pixels = list(img_diff.getdata())
     width, height = img_diff.size
-    pixels = [pixels[i * width:(i + 1) * width] for i in xrange(height)]
+    pixels = [pixels[i * width:(i + 1) * width] for i in range(height)]
 
     px_diff = 0
     for line in pixels[ignore_first_px_rows:]:
