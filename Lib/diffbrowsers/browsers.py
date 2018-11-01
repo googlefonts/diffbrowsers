@@ -91,9 +91,10 @@ android_browsers = {'browsers': [android]}
 vf_browsers = {'browsers': [
     win_10_pc_firefox,
     win_10_pc_chrome,
-    win_10_pc_edge,
     osx_high_sierra_safari
 ]}
+
+safari_latest = {'browsers': [osx_high_sierra_safari]}
 
 test_browsers = {
     'all_browsers': all_browsers,
@@ -101,4 +102,5 @@ test_browsers = {
     'osx_browser': osx_browser,
     'android_browsers': android_browsers,
     'vf_browsers': vf_browsers,
+    'safari_latest': safari_latest,
 }
