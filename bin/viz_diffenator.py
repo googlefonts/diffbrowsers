@@ -21,11 +21,11 @@ def main():
     parser.add_argument('-l', '--gfr-local', action="store_true", default=False)
     args = parser.parse_args()
 
-    browsers_to_test = test_browsers['gdi_browsers']
+    browsers_to_test = test_browsers['safari_latest']
     output_dir = 'out'
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
-    font_img_dir = os.path.join(output_dir, 'gf-sans')#os.path.basename(args.fonts_a)[:-4])
+    font_img_dir = os.path.join(output_dir, os.path.basename(args.fonts_a)[:-4])
 
     diffbrowsers = DiffBrowsers(gfr_instance_url=args.gfr_url,
                                 gfr_is_local=args.gfr_local,
