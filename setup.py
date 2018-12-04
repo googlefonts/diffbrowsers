@@ -58,7 +58,7 @@ setup(
         "idna==2.6",
         "nose==1.3.7",
         "olefile==0.44",
-        "Pillow==5.0.0",
+        "Pillow",
         "pybrowserstack-screenshots==0.1",
         "requests==2.18.4",
         "simplejson==3.12.0",
