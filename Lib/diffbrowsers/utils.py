@@ -27,23 +27,7 @@ def load_browserstack_credentials():
         credentials = config.items('Credentials')
         return credentials[0][1], credentials[1][1]
     else:
-        return input_browserstack_credentials(config_filepath)
-
-
-def input_browserstack_credentials(config_filepath):
-    """User needs to input their Browserstack username and access key."""
-    placeholder = '[Credentials]\nusername = {}\naccess_key = {}\n'
-    print 'No BrowserStack credentials found. Input your details:'
-    username = raw_input('Browserstack username: ')
-    acc_key = raw_input('Browserstack Access Key: ')
-
-    if not username or not acc_key:
-        raise NoBrowserStackAuthFile()
-
-    with open(config_filepath, 'w') as config:
-        config.write(placeholder.format(username, acc_key))
-        print 'Config file written to {}'.format(config_filepath)
-        return username, acc_key
+        raise NoBrowserStackAuthFile
 
 
 def cli_reporter(report):

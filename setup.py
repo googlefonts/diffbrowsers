@@ -19,7 +19,7 @@ from distutils import log
 
 setup(
     name='gfdiffbrowsers',
-    version='0.0.1',
+    version='0.1.2',
     author="Marc Foley",
     author_email="marc@mfoley.uk",
     description="Diff two sets of fonts in different browsers",
@@ -33,6 +33,7 @@ setup(
         ],
     },
     scripts=[
+        os.path.join('bin', 'test_gf_vf.py'),
         os.path.join('bin', 'test_gf_autohint.py'),
         os.path.join('bin', 'test_gf_exhaustive.py'),
         os.path.join('bin', 'viz_diffenator.py')
@@ -57,7 +58,7 @@ setup(
         "idna==2.6",
         "nose==1.3.7",
         "olefile==0.44",
-        "Pillow==5.0.0",
+        "Pillow",
         "pybrowserstack-screenshots==0.1",
         "requests==2.18.4",
         "simplejson==3.12.0",
