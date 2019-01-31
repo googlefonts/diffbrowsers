@@ -4,8 +4,8 @@ import requests
 import json
 
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 GF_PRODUCTION_URL = 'http://www.gf-regression.com'
 

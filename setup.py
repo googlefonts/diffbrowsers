@@ -19,7 +19,7 @@ from distutils import log
 
 setup(
     name='gfdiffbrowsers',
-    version='0.1.2',
+    version='0.1.3',
     author="Marc Foley",
     author_email="marc@mfoley.uk",
     description="Diff two sets of fonts in different browsers",
