@@ -12,11 +12,13 @@ import logging
 from diffbrowsers.gfregression import GFRegression, GF_PRODUCTION_URL
 from diffbrowsers.browsers import test_browsers
 from diffbrowsers.screenshot import ScreenShot
-from diffbrowsers.utils import load_browserstack_credentials
+from diffbrowsers.utils import (
+    load_browserstack_credentials,
+    NoBrowserStackAuthFile
+)
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.INFO)
 
 class DiffBrowsers(object):
     """Class to control GF Regression and Browser Stack api."""
@@ -29,6 +31,8 @@ class DiffBrowsers(object):
 
         if not auth:
             auth = load_browserstack_credentials()
+            if not auth:
+                raise NoBrowserStackAuthFile
 
         if gfr_instance_url.endswith('/'):
             gfr_instance_url = gfr_instance_url[:-1]
@@ -109,6 +113,10 @@ class DiffBrowsers(object):
             gif_filename = img[:-4] + '.gif'
             dir1_img_path = os.path.join(dir1, img)
             dir2_img_path = os.path.join(dir2, img)
+            if not self._valid_imgs([dir1_img_path, dir2_img_path]):
+                logger.warning(("Skipping {}. Before/after images are "
+                             "corrupt").format(gif_filename))
+                continue
             with Image.open(dir1_img_path) as dir1_img, \
                  Image.open(dir2_img_path) as dir2_img:
                 dir1_img.save(
@@ -135,6 +143,10 @@ class DiffBrowsers(object):
             dir1_img_path = os.path.join(dir1, img)
             dir2_img_path = os.path.join(dir2, img)
             diff_img_path = os.path.join(diff_dir, img)
+            if not self._valid_imgs([dir1_img_path, dir2_img_path]):
+                logger.warning(("Skipping {}. Before/after images are "
+                             "corrupt").format(diff_img_path))
+                continue
             with Image.open(dir1_img_path) as dir1_img, \
                 Image.open(dir2_img_path) as dir2_img:
                 comparison = compare_image(dir1_img, dir2_img, diff_img_path)
@@ -143,6 +155,12 @@ class DiffBrowsers(object):
 
     def update_browsers(self, browsers):
         self.screenshot.config['browsers'] = browsers['browsers']
+
+    def _valid_imgs(self, imgs_paths):
+        for img_path in imgs_paths:
+            if os.path.getsize(img_path) == 0:
+                return False
+        return True
 
 
 def compare_image(img1, img2, out_img=None,

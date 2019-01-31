@@ -26,9 +26,7 @@ def load_browserstack_credentials():
         config.read(config_filepath)
         credentials = config.items('Credentials')
         return credentials[0][1], credentials[1][1]
-    else:
-        raise NoBrowserStackAuthFile
-
+    return None
 
 def cli_reporter(report):
     """Simple output for report dict

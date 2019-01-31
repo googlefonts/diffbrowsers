@@ -6,9 +6,8 @@ import time
 from diffbrowsers.utils import download_file
 
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.INFO)
 
 class ScreenShot(browserstack_screenshots.Screenshots):
     """Expansion for browserstack screenshots Lib. Adds ability to

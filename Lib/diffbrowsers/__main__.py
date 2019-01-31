@@ -28,6 +28,9 @@ from diffbrowsers.diffbrowsers import DiffBrowsers
 from diffbrowsers.browsers import test_browsers
 from diffbrowsers.gfregression import GF_PRODUCTION_URL, VIEWS
 from diffbrowsers.utils import cli_reporter
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def main():
