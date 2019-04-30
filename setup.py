@@ -55,13 +55,8 @@ setup(
         'Topic :: Multimedia :: Graphics :: Editors :: Vector-Based',
     ],
     install_requires=[
-        "idna==2.8",
-        "nose==1.3.7",
-        "olefile==0.44",
-        "Pillow==5.4.1",
+        "Pillow>=5.4.1",
         "pybrowserstack-screenshots==0.1",
-        "requests==2.21.0",
-        "simplejson==3.12.0",
-        "urllib3==1.24.1",
+        "requests",
     ],
 )
