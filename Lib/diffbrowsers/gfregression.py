@@ -42,10 +42,12 @@ class GFRegression:
         If the fonts uploaded successfully, GF Regression will return a uuid.
         This can be used to form urls to view endpoints."""
         logger.info("Posting fonts to GF Regression")
+        fonts_after = set(fonts_after)
         if fonts_before == 'from-googlefonts':
             url_upload = self.instance_url + '/api/upload/googlefonts'
             payload = [('fonts_after', open(f, 'rb')) for f in fonts_after]
         else:
+            fonts_before = set(fonts_before)
             url_upload = self.instance_url + '/api/upload/user'
             payload = [('fonts_after', open(f, 'rb')) for f in fonts_after] + \
                       [('fonts_before', open(f, 'rb')) for f in fonts_before]
