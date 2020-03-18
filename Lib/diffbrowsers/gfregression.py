@@ -7,7 +7,7 @@ import json
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-GF_PRODUCTION_URL = 'http://www.gf-regression.com'
+GF_PRODUCTION_URL = 'http://35.238.63.0/'
 
 VIEWS = (
     'waterfall',
@@ -60,7 +60,7 @@ class GFRegression:
         uuid = self._extract_uuid(url)
         self.info = self._session_info(uuid)
 
-    def url(self, view, font_type, pt=None):
+    def url(self, view, font_type, pt=None, styles=None):
         """Return a url from a user's input params."""
         if view not in VIEWS:
             raise UnknownGFRegressionViewError()
@@ -70,6 +70,8 @@ class GFRegression:
                                           self.info['uuid'], view, font_type)
         if pt:
             url = url + '/%s' % pt
+        if styles:
+            url = url + '?styles=%s' % ",".join(styles)
         return url
 
     @staticmethod
