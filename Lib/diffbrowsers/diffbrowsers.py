@@ -8,6 +8,7 @@ import json
 import time
 import shutil
 import logging
+from copy import deepcopy
 
 from diffbrowsers.gfregression import GFRegression, GF_PRODUCTION_URL
 from diffbrowsers.browsers import test_browsers
@@ -41,6 +42,7 @@ class DiffBrowsers(object):
             instance_url=gfr_instance_url
         )
         self.browserstack_settings = browsers
+        self.browserstack_settings['wait_time'] = 2
         if gfr_is_local:
             self.browserstack_settings['local'] = True
         self.screenshot = ScreenShot(auth=auth, config=self.browserstack_settings)
@@ -61,6 +63,7 @@ class DiffBrowsers(object):
         self.gf_regression.load_session(url)
         self.stats['fonts'] = self.gf_regression.info['fonts']
 
+
     def diff_view(self, screenshot_view, pt=None, styles=None, gen_gifs=True):
         """Return before and after images from a GF Regression view.
 
@@ -73,34 +76,41 @@ class DiffBrowsers(object):
         view_path = os.path.join(self.dst_dir, view_dir)
         self._mkdir(view_path, overwrite=True)
 
+        # this is a defensive copy, since the self state will be
+        # compromised!
+        stats = deepcopy(self.stats)
+
         if styles:
-            self.stats['fonts'] = [f for f in self.stats['fonts'] if f in styles]
+            stats['fonts'] = [f for f in stats['fonts'] if f in styles]
 
         logger.info('Generating {} before images'.format(screenshot_view))
         before_url = self.gf_regression.url(screenshot_view, 'before', pt, styles)
         before_path = os.path.join(view_path, 'before')
         self._mkdir(before_path, overwrite=True)
-        self.screenshot.take(before_url, before_path)
+        poll_before = self.screenshot.poll_screenshots(before_url, before_path)
 
         logger.info('Generating {} after images'.format(screenshot_view))
         after_url = self.gf_regression.url(screenshot_view, 'after', pt, styles)
         after_path = os.path.join(view_path, 'after')
         self._mkdir(after_path, overwrite=True)
-        self.screenshot.take(after_url, after_path)
+        poll_after = self.screenshot.poll_screenshots(after_url, after_path)
+
+        yield 'poll jobs', [poll_before, poll_after]
 
         diff_dir = os.path.join(view_path, 'diff')
         self._mkdir(diff_dir, overwrite=True)
 
         comparison = self._compare_images(before_path, after_path, diff_dir)
         r_view = '{}_{}pt'.format(screenshot_view, pt) if pt else screenshot_view
-        self.stats['views'][r_view] = comparison
+        stats['views'][r_view] = comparison
 
         if gen_gifs:
             logger.info('Generating {} gifs'.format(screenshot_view))
             gif_dir = os.path.join(view_path, 'gifs')
             self._mkdir(gif_dir, overwrite=True)
             self._gen_gifs(before_path, after_path, gif_dir)
-        return comparison
+        # stats is a defensive copy!
+        return stats, comparison
 
     def _mkdir(self, path, overwrite=False):
         """Create a directory, if overwrite enabled rm -rf the dir"""
